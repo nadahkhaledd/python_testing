@@ -2,6 +2,8 @@ from unittest import TestCase
 from unittest.mock import patch
 import app
 from blog import Blog
+from post import Post
+
 
 class AppTest(TestCase):
     def test_menu_prompt_print(self):
@@ -21,4 +23,44 @@ class AppTest(TestCase):
         with patch('builtins.print') as mocked_print:
             app.print_blogs()
             mocked_print.assert_called_with('- Test by test author (0 posts)')
+
+    def test_create_blog_request(self):
+        with patch('builtins.input') as mocked_input:
+            mocked_input.side_effect = ('Test', 'Test author')
+            app.create_blog_request()
+
+            self.assertIsNotNone(app.blogs.get('Test'), )
+
+    def test_read_blog_request(self):
+        b = Blog('Test', 'test author')
+        app.blogs = {'Test': b}
+        with patch('builtins.input', return_value='Test'):
+            with patch('app.print_posts') as mocked_print_posts:
+                app.read_blog_request()
+                mocked_print_posts.assert_called_with(b)
+
+    def test_print_posts(self):
+        b = Blog('Test', 'test author')
+        b.create_post('post', 'post content')
+        app.blogs = {'Test': b}
+
+        with patch('app.print_post') as mocked_print_post:
+            app.print_posts(b)
+            mocked_print_post.assert_called_with(b.posts[0])
+
+    def test_print_post(self):
+        p = Post('title', 'post content')
+        expected = '''
+--- title ---
+
+post content
+
+'''
+        with patch('builtins.print') as mocked_print:
+            app.print_post(p)
+
+            mocked_print.assert_called_with(expected)
+
+
+
 
