@@ -14,3 +14,9 @@ class BlogTest(TestCase):
         b = Blog('test', 'test author')
         b2 = Blog('test2', 'author 2')
         self.assertEqual(b.__repr__(), 'test by test author (0 posts)')
+
+    def test_repr_multipost(self):
+        b = Blog('test', 'test author')
+        b.posts = ['p1', 'p2']
+
+        self.assertEqual(b.__repr__(), 'test by test author (2 posts)')
