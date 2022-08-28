@@ -15,4 +15,8 @@ class Blog:
         self.posts.append(Post(title, content))
 
     def json(self):
-        pass
+        return {
+            'title': self.title,
+            'author': self.author,
+            'posts': [post.json() for post in self.posts]
+        }

@@ -9,3 +9,14 @@ class BlogTest(TestCase):
 
         self.assertEqual(len(b.posts), 1)
         self.assertEqual(b.posts[0].title, 'post')
+
+    def test_json(self):
+        b = Blog('test', 'test author')
+        b.create_post('post', 'post content')
+        expected = {'title': 'test', 'author': 'test author',
+                    'posts': [
+                        {'title': 'post', 'content': 'post content'}
+                    ]
+                    }
+
+        self.assertDictEqual(expected, b.json())
