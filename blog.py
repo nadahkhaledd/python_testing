@@ -4,3 +4,10 @@ class Blog:
         self.author = author
         self.posts = []
 
+    def __repr__(self):
+        return '{} by {} ({} posts)'.format(self.title, self.author, len(self.posts))
+
+    def create_post(self):
+        pass
+    def json(self):
+        pass
